@@ -1,0 +1,47 @@
+node -v 노드 버전 확인
+npm init -y 으로 package.json 설치 완료
+npm i nodemon -D  로 nodemon 설치
+바벨 만들기 위해 babel.config.json 파일 생성,
+nodemon.json 파일 생성.
+babel.config.json 파일 생성.
+src 폴더 생성 > server.js 생성
+npm i @babel/core @babel/cli @babel/node -D
+.gitignore 생성
+
+//.gitignore 파일에
+/node_modules
+위 내용 작성하는 이유는 ? node_modules 폴더는 github에 업로드하지 않을 것임.
+
+//nodemon.json 파일에
+{
+	"exec" : "babel-node src/server.js"
+}
+작성해줌. exec는 server.js를 실행시켜줌
+
+//babel.config.json 파일에
+{
+	"presets" : ["babel/preset-env"]
+}
+작성해주고, 설치하기(위에서 한번에 해도 됨)
+npm i @babel/preset-env -D
+
+//package.json 파일에 가멸 필요한 것들 설치되어 있음을 확인, 추가로 script 작성
+{ ...
+	"script" : {
+		"dev" : "nodemon"
+	}
+...}
+dev를 사용해 nodemoe이 호출되면 nodemon이 nodemoen.json을 살펴보고 그 코드를 실행할 것.
+
+준비는 완료
+
+npm i express 설치,
+npm i pug 설치
+
+//src/server.js 파일에서 express import해주기
+import express from '"express"
+...
+app.listen(30000);
+
+npm run dev 로 실행
+
