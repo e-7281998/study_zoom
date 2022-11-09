@@ -1,0 +1,24 @@
+ws
+webSocket protocol 실행하는 package.
+(nodejs webSocket에서 core임... )
+설치
+npm i ws
+
+*express는 http임.
+express에 ws 기능 합쳐야 함.
+
+nodejs 에 내장된 http package 사용해보기
+//server.js 에 기존 서버 여는 방식 지우고,
+import http from 'http';
+...
+const server = http.createServer(requestListener경로);
+
+*requestListener경로에 app을 넣음으로 써 express application으로 서버를 만들게 됨.
+서버에 접근할 준비 완료 => 서버에 웹소켓 만들 수 있음.
+
+//server.js
+...
+const wss = new WebSocket.Server({ server });
+웹 소켓 서버에 server를 전달해줌.
+
+=> http, webSocket 둘 다 돌리기 가능.
