@@ -1,0 +1,9 @@
+nodemon 사용을 위하 nodemon.json 설정
+nodemon은 프로젝트 살펴보고, 변경사항 있을 경우 서버 재시작 하는 프로그램
+서버 재시작 대신 babel-node 실행
+
+babel-node는 작성한 코드를 일반 nodejs 코드로 컴파일, 그 작업을 src/server.js 파일에 실행
+
+//server.js
+ app.get("/*", (req, res) => res.redirect("/"));
+ 어떤 경로를 들어가도 홈으로 돌려보냄
