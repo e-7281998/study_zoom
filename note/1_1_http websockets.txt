@@ -1,0 +1,9 @@
+http
+유저가 request 보내면 response 함
+stateless임 : 서버가 유저를 기억못함.
+내가 누구인지 알려주는 cookie를 같이 보내야 함.
+real-time으로 진행되지 않음.
+
+webSocket
+웹소켓을 사용해 연결하고 싶고, 서버가 지원한다면 => http://wwW~ 대신 wss://www~~
+real-time으로 작동.
