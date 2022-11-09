@@ -1,0 +1,30 @@
+나중에 pug 페이지 렌더하기 위해 pug  설정하기
+//server.js
+app.set('view engine', 'pug');
+app.set('views', __dirname + '/views');
+
+app.get("/", (req, res) => res.render("home"));
+
+추가
+
+/src/views/home.pug  생성
+
+app.get("/", (req, res) => res.render("home")); 를 통해 응답으로 보내줌
+
+//home.pug에 script 추가
+script(src="/public/js/app.js")
+
+/public으로 이동해도 작동하지 않음. static 작업 해줘야함.
+//srver.js
+app.use("/public", express.static(__dirname + "/public"));
+를 통해 /public 으로 이동 시 __dirname + "/public" 파일 보여주도록 함.
+
+현재 nodemon은 파일 중 하나라도 바뀌면 재시작 됨.
+프론트와 관련없는, js와 관련한 파일이 바뀔 때만 nodemon이 새로 시작하도록 설정.
+//nodemon.json
+ignore": [
+        "src/public/*"
+    ],
+추가
+(실행중인 서버 종료후 다시 시작해보면 )  src/public 하위 파일들 제외하고 관찰함.
+
