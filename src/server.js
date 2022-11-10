@@ -19,11 +19,15 @@ const server = http.createServer(app);
 //---webSocket 서버
 const wss = new WebSocket.Server({ server });
 
+const sockets = [];
+
 wss.on("connection", (socket) => {
+    sockets.push(socket);
     console.log("Cnnected to Browser ✓");
     socket.on("close", () => { console.log("Disconnected to Browser ✕"); });
-    socket.on("message", (msg) => { console.log("New Message: " + msg); });
-    socket.send("hello?");
+    socket.on("message", (msg) => {
+        sockets.forEach(aSocket => aSocket.send(msg.toString('utf-8')));
+    });
 });
 
 server.listen(3000, handleListen);

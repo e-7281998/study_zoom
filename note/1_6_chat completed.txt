@@ -1,0 +1,16 @@
+//server.js
+const sockets = [];
+소켓 저장소 만들기
+
+wss.on("connection", (socket) => {
+    sockets.push(socket);
+    새로운 소켓이 만들어지면 Array 에 push함 : 기록
+    console.log("Cnnected to Browser ✓");
+    socket.on("close", () => { console.log("Disconnected to Browser ✕"); });
+    socket.on("message", (msg) => {
+        sockets.forEach(aSocket => aSocket.send(msg.toString('utf-8')));
+    });
+    메시지가 들어오면 소켓Array 돌면서 각각의 소켓에 메시지 돌려보내주기.
+});
+
+내가 보낸 메시지가 나를 포함한 모든 브라우저(클라이언트)에 전달됨.
