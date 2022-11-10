@@ -1,0 +1,20 @@
+socket을 통해 backend => frontend 데이터 보내기 : send()
+//server.js
+wss.on("connection", (socket) => {
+    socket.send("hello?");
+})
+
+frontend에서도 받아줘야 함 :message
+//app.js
+socket.addEventListener("open", () => {
+    console.log("Connected to Server");
+});
+socket이 open 되면
+
+socket.addEventListener("message", (msg) => {
+    console.log(msg);
+});
+서버로부터 받은 메시지 출력
+
+
+
