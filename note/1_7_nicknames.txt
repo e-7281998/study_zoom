@@ -1,0 +1,43 @@
+닉네임을 설정해 누가 보냈는지 알 수 있도록 함.
+그러기 위해 json 형태로 보내야 함.
+{
+    type: "nick",
+    payload: input.value
+}
+그러나 위와 같은 형태로 보낼 경우 받는 사람이 object로 받음.
+서버로 보낼 때 string형으로 변형시켜 보내주어야 좋음.
+*backend가 javascript일 수 있고, java일 수 있고, GO일 수 있고....
+*json은 javascript object이므로
+
+//app.js
+function makeMessage(type, payload) {
+    const msg = { type, payload };
+    return JSON.stringify(msg);
+}
+위와 같은 함수를 만들고, json으로 저장 후, stringify를 통해 문자열로 return 해줌.
+
+socket.send(makeMessage("new_message", input.value));
+위와 같이 호출 할 때 타입은 정해주고, input 값만 때에 따라 다르게 보내도록.
+
+
+socket 안에서 닉네임 찾아줘야 함. 왜냐하면 소켓이 누군지 알아야하기 때문.
+//server.js
+socket.on("message", (msg) => {
+        const message = JSON.parse(msg);
+
+        switch (message.type) {
+            case "new_message":
+                sockets.forEach(aSocket => aSocket.send(message.payload));
+                break;
+            case "nickname":
+                소켓에 새로운 아이템"닉네임" 추가.
+                소켓은 기본적으로 객체임.
+                socket["nickname"] = message.payload;   
+                *위와 같은 형식으로 새로운 항목 추가
+                break;      
+        }
+    });
+
+익명의 소켓일 경우도 생각해야 함. (닉네임 설정하지 않은)
+//server.js
+    socket["nickname"] = "Anon";
