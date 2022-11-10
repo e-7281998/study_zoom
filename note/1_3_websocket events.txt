@@ -1,0 +1,27 @@
+websocket의 이벤트는
+.on(이벤트명, 실행)
+
+connection은 callback으로 socket 받음.
+
+socket : 브라우저와의 연락망 
+
+backend에 소켓을 만들었다면 frontend에도 연락해달라는 액션 취해야함.
+
+//app.js
+const socket = new WebSocket("ws://localhost:3000");
+
+만약
+const socket = new WebSocket("http://localhost:3000");
+로 사용한다면 안됨 : 프로토콜이 다르기 때문.
+'ws' or 'wss' 로 사용해야 함.
+*ws: websocket, wss: websocket secure
+
+이 때 localhost:3000을 사용하지 않음.
+모바일로 본다면 localhost:3000이 아니기 때문.
+브라우저 스스로 가져오게 해야함.
+콘솔창
+window.location 을 통해 어디있는지 정보를 알아보면 됨.
+
+//app.js
+const socket = new WebSocket(`ws://${window.location.host}`);
+로 작성해야 함.

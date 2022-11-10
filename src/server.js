@@ -19,4 +19,10 @@ const server = http.createServer(app);
 //---webSocket 서버
 const wss = new WebSocket.Server({ server });
 
+function handleConnection(socket) {
+    console.log(socket);
+}
+
+wss.on("connection", handleConnection)
+
 server.listen(3000, handleListen);
