@@ -19,7 +19,11 @@ const httpServer = http.createServer(app);
 //---http 서버
 
 //--socketIO 서버
-const swServer = SocketIO(httpServer);
+const wsServer = SocketIO(httpServer);
+
+wsServer.on("connection", socket => {
+    console.log(socket);
+});
 
 //---webSocket 서버
 // const wss = new WebSocket.Server({ httpServer });
