@@ -18,3 +18,12 @@ frontend에서는 import하면 됨.(쉽게 가져오기o)
 >>>//home.pug
         script(src="/socket.io/socket.io.js")
 
+socketIO설치하면 화면에서 io라는 함수를 볼 수 있음.
+//콘솔
+io
+io는 자동적으로 backend socketIO와 연결해주는 fn임.
+//app.js
+const socket = io();
+위 코드면 끝남.
+io fn이 알아서 socket.io를 실행하고 있는 서버를 찾을 것임.
+
