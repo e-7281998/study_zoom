@@ -1,5 +1,6 @@
 import express from "express";
-import WebSocket from "ws";
+// import WebSocket from "ws";
+import SocketIO from 'socket.io';
 import http from "http";
 import { parse } from "path";
 
@@ -14,31 +15,34 @@ app.get("/*", (req, res) => res.redirect("/"));
 
 const handleListen = () => console.log("Listening on http://localhost:3000");
 
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
 //---http 서버
 
+//--socketIO 서버
+const swServer = SocketIO(httpServer);
+
 //---webSocket 서버
-const wss = new WebSocket.Server({ server });
+// const wss = new WebSocket.Server({ httpServer });
 
-const sockets = [];
+// const sockets = [];
 
-wss.on("connection", (socket) => {
-    sockets.push(socket);
-    socket["nickname"] = "Anon";
-    console.log("Cnnected to Browser ✓");
-    socket.on("close", () => { console.log("Disconnected to Browser ✕"); });
-    socket.on("message", (msg) => {
-        const message = JSON.parse(msg);
+// wss.on("connection", (socket) => {
+//     sockets.push(socket);
+//     socket["nickname"] = "Anon";
+//     console.log("Cnnected to Browser ✓");
+//     socket.on("close", () => { console.log("Disconnected to Browser ✕"); });
+//     socket.on("message", (msg) => {
+//         const message = JSON.parse(msg);
 
-        switch (message.type) {
-            case "new_message":
-                sockets.forEach(aSocket => aSocket.send(`${socket.nickname} : ${message.payload}`));
-                break;
-            case "nickname":
-                socket["nickname"] = message.payload;
-                break;
-        }
-    });
-});
+//         switch (message.type) {
+//             case "new_message":
+//                 sockets.forEach(aSocket => aSocket.send(`${socket.nickname} : ${message.payload}`));
+//                 break;
+//             case "nickname":
+//                 socket["nickname"] = message.payload;
+//                 break;
+//         }
+//     });
+// });
 
-server.listen(3000, handleListen);
+httpServer.listen(3000, handleListen);

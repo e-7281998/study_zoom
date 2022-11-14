@@ -1,0 +1,16 @@
+websocket 대신 socketio사용해보기
+npm i socket.io
+
+//server.js
+const swServer = SocketIO(httpServer);
+위 코드 만으로 socketIO는 url을 줄 것임.
+이 url은 /socket.io/socket.io.js
+http://localhost:3000/socket.io/socket.io.js을 통해 볼 수 있음.
+
+>>>
+socketIO를 서버에 설치한 것 처럼 클라이언트도 SocketIO를 설치해야 함.
+브라우저가 주는 websocket은 SocketIO와 호환되지 않음.
+SocketIO가 더 많은 기능을 주기 때문.
+그래서 SocketIO를 브라우저에 설치해야 함.
+그래서 위의 url을 넘김.
+frontend에서는 import하면 됨.(쉽게 가져오기o)
