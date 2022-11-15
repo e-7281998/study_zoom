@@ -1,0 +1,35 @@
+app.js에서 socket.send가 아닌 socket.emit을 사용해줌.
+socket.emit("enter_room", argument);
+enter_room이라는 이벤트를 emit해주면 됨. 항상 메시지를 보낼 필요 없음.
+emit을 하면 argument를 보낼 수 있음.
+
+//app.js
+socket.emit("enter_room", { payload: input.value });
+payload에 input.value를 보냄
+*object 사용 가능
+
+서버에서 잘 받고 있는지 확인하기
+//server.js
+wsServer.on("connection", socket => {
+    socket뒤에 원하는 이벤트명 넣어주면 됨
+    socket.on("enter_room", (msg) => console.log(msg));
+});
+
+//app.js
+socket.emit("enter_room", { payload: input.value }, () => {
+        console.log("server is done");
+    });
+.emit(이벤트명, argument, callback)임.
+
+//server.js
+wsServer.on("connection", socket => {
+    done에 enter_room 콜백 함수가 들어감.
+    서버는 backend에서 함수를 호출하지만, 함수의 실행은 frontend에서 실행됨.
+    socket.on("enter_room", (msg, done) => {
+        console.log(msg);
+        setTimeout(() => {
+            done();
+        })
+    }, 10000);
+
+});
