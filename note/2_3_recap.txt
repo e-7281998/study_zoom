@@ -1,0 +1,37 @@
+.emit('이벤트명', argument);
+argument로 많은 것을 넘길 수 있음.
+ex) .emit("enter_room", "hello", 5, "bye" ...);
+
+만약 function을 넣고 싶다면 가장 마지막 argument에 넣어야 함.
+
+//app.js
+function backendDone() {
+    console.log('backend done');
+}
+
+function handleRoomSubmit(e) {
+    e.preventDefault();
+    const input = form.querySelector("input");
+    socket.emit("enter_room", input.value, backendDone);
+    input.value = ""
+}
+
+코드의 실행은 front에서 실행하는 것임.
+backend는 일종의 방아쇠 역할(버튼을 눌러주는).
+backend에서 front의 function을 함부로 실행시키면 보안상의 문제가 생길 수 있음.
+(무슨 코드인줄 알고 함부로...)
+
+backend에서 argument넘겨 줄 수 있음
+//app.js
+function backendDone(msg) {
+    console.log(`The backend says ${msg}`);
+}
+//server.js
+wsServer.on("connection", socket => {
+    socket.on("enter_room", (roomName, done) => {
+        console.log(roomName);
+        setTimeout(() => {
+            done("hello from backend");
+        }, 10000);
+    });
+});
