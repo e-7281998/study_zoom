@@ -1,0 +1,33 @@
+socketIO는 기본적으로 room을 제공함.
+*room이란 연결 통로, 하나의 채팅방 같은 개념이라 생각.
+다음과 같이 만듬
+//server.js
+ socket.join("룸 이름");
+
+ console.log(socket.rooms);
+ 을 통해 소켓에 만들어진 room들을 볼 수 있음.
+
+ socket.onAny((e, args) => {
+    console.log(e);
+ });
+ .onAny는 middleware 같은 것.
+ 어느 이벤트에서든지 console.log할 수 있음.
+
+>>> 방에 참가하려면 socket.join
+>>> socket에 어떤 방이 있는지 알려면 socket.rooms
+>>> socket.id로 구별 가능.
+
+//app.js
+room을 만들기 전에 메시지 작성칸은 숨기기
+room.hidden = true;
+
+let roomName;
+
+room 만들면 실행됨.
+function showRoom() {
+    룸 이름 설정 폼은 숨기고, 메시지 보낼 폼 보여주기
+    welcome.hidden = true;
+    room.hidden = false;
+    const h3 = room.querySelector("h3");
+    h3.innerText = `Room - ${roomName}`;
+}
