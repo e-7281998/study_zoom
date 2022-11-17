@@ -1,0 +1,3 @@
+//server.js
+socket.to(roomName).emit("welcome");
+나를 제외한 모든이에게 전송
