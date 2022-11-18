@@ -1,10 +1,12 @@
 const socket = io();
 
 const welcome = document.getElementById("welcome");
-const form = welcome.querySelector("form");
+const nameForm = welcome.querySelector("#name");
+const roomNameForm = welcome.querySelector("#roomName");
 const room = document.getElementById("room");
 
 room.hidden = true;
+roomNameForm.hidden = true;
 
 let roomName;
 
@@ -25,11 +27,11 @@ function handleMessageSubmit(e) {
     input.value = "";
 }
 
-function handleNicknameSubmit(e) {
-    e.preventDefault();
-    const input = room.querySelector("#name input");
-    socket.emit("nickname", input.value);
-}
+// function handleNicknameSubmit(e) {
+//     e.preventDefault();
+//     const input = room.querySelector("#name input");
+//     socket.emit("nickname", input.value);
+// }
 
 function showRoom() {
     welcome.hidden = true;
@@ -37,20 +39,29 @@ function showRoom() {
     const h3 = room.querySelector("h3");
     h3.innerText = `Room - ${roomName}`;
     const msgForm = room.querySelector("#msg");
-    const nameForm = room.querySelector("#name");
+    // const nameForm = room.querySelector("#name");
     msgForm.addEventListener("submit", handleMessageSubmit);
-    nameForm.addEventListener("submit", handleNicknameSubmit);
+    // nameForm.addEventListener("submit", handleNicknameSubmit);
 }
 
 function handleRoomSubmit(e) {
     e.preventDefault();
-    const input = form.querySelector("input");
+    const input = roomNameForm.querySelector("input");
     socket.emit("enter_room", input.value, showRoom);
     roomName = input.value;
     input.value = ""
 }
 
-form.addEventListener("submit", handleRoomSubmit);
+function handleNameSubmit(e) {
+    e.preventDefault();
+    const input = nameForm.querySelector("input");
+    socket.emit("nickname", input.value);
+    nameForm.hidden = true;
+    roomNameForm.hidden = false;
+}
+
+nameForm.addEventListener("submit", handleNameSubmit);
+roomNameForm.addEventListener("submit", handleRoomSubmit);
 
 socket.on("welcome", (user) => {
     addMessage(`${user} Arrived!`);
