@@ -1,0 +1,52 @@
+Adapter
+:다른 서버들 사이에 실시간 어플리케이션을 동기화
+*모든 클라이언트가 같은 서버에 연결되어있지는 않음.(클라이언트는 같은 화면임)
+
+서버A - 클라이언트1,2,3
+서버B - 클라이언트4,5
+
+위와 같은 구성으로 되어있을 때(클라이언트 화면은 동일)
+클라이언트1과 4는 소통할 수 없음.
+서버가 다르기 때문.
+이 때 서버A와 서버B를 연결해주는 것이 Adapter.
+=> 클라이언트1과 4의 소통이 가능해짐.
+
+Adapter는 누가 연결되었는지, 현재 어플리케이션에 room이 얼마나 있는지 알려줌.
+
+//server.js
+ socket.onAny((event) => {
+        다음의 코드를 통해 소켓 어댑터의 rooms, sids의 map 형태 관람o
+        console.log('Adapter : ', wsServer.sockets.adapter);
+        console.log(`Socket Event: ${event}`);
+    });
+
+const food = new Map()
+food.set("pizza", 12);
+pizza는 unique key, value는 12
+food.get("pizza")를 통해 value 확인o
+
+sids에는 개인방, rooms에는 개인방, 공개방 다 있음.
+rooms가 sids를 포함한다고 보면 됨.
+공개방만 얻고 싶을 때는 rooms에서 sids를 빼면 됨.
+
+//server.js
+function publicRooms() {
+    // const sids = wsServer.sockets.adapter.sids;
+    // const rooms = wsServer.sockets.adapter.rooms;
+    위 두 코드를 다음과 같이 쓸 수 있음.
+    const {
+        sockets: {
+            adapter: { sids, rooms },
+        },
+    } = wsServer;
+    -----------------------------------까지
+
+    const publicRooms = [];
+    rooms.forEach((_, key) => {
+        if (sids.get(key) === undefined) {
+            publicRooms.push(key);
+        }
+    });
+
+    return publicRooms;
+}

@@ -21,9 +21,29 @@ const httpServer = http.createServer(app);
 //--socketIO 서버
 const wsServer = SocketIO(httpServer);
 
+function publicRooms() {
+    // const sids = wsServer.sockets.adapter.sids;
+    // const rooms = wsServer.sockets.adapter.rooms;
+    const {
+        sockets: {
+            adapter: { sids, rooms },
+        },
+    } = wsServer;
+
+    const publicRooms = [];
+    rooms.forEach((_, key) => {
+        if (sids.get(key) === undefined) {
+            publicRooms.push(key);
+        }
+    });
+
+    return publicRooms;
+}
+
 wsServer.on("connection", socket => {
     // socket["nickname"] = "Anon";
     socket.onAny((event) => {
+        // console.log('Adapter : ', wsServer.sockets.adapter);
         console.log(`Socket Event: ${event}`);
     });
     socket.on("enter_room", (roomName, done) => {
