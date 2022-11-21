@@ -1,0 +1,44 @@
+//server.js
+        wsServer.sockets.emit("room_change", publicRooms());
+
+연결된 모든 socket에게 메시지 보내기.
+io.sockets.emit();
+
+//app.js
+socket.on("room_change", console.log);
+는  socket.on("room_change", (msg) => console.log(msg));와 같음
+새로운 방에 입장하면 모두의 콘솔에 message가 보내지는 것을 확인할 수 있음.
+=>새로운 방이 생겼다는 메시지
+
+//server.js
+    socket.on("disconnect", () => {
+        wsServer.sockets.emit("room_change", publicRooms());
+    });
+방을 떠날 때 남아있는 방을 알려줌.
+
+//server.js
+socket.on("nickname", (nickname) => {
+        socket["nickname"] = nickname;
+        닉네임 생성 후 방 목록 보이도록
+        안하면
+        : 클1,2 접속 => 클1이 방 만듬 => 클2 방 목록에 보임 => 클3 접속 => 방 목록 안보임
+        위와 같은 문제 발생함. (방 만들 때 접속해 있는 사람들에게만 방 목록 보여짐을 해결)
+        wsServer.sockets.emit("room_change", publicRooms());
+    });
+
+//app.js
+socket.on("room_change", (rooms) => {
+    const roomList = welcomeRoom.querySelector("ul");
+    이벤트 발생할 때마다 ul 새로 그려줌
+    roomList.innerHTML = "";
+
+    if (rooms.length === 0) {
+        return;
+    }
+
+    rooms.forEach(room => {
+        const li = document.createElement("li");
+        li.innerText = room;
+        roomList.append(li);
+    });
+});

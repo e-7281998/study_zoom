@@ -1,12 +1,13 @@
 const socket = io();
 
 const welcome = document.getElementById("welcome");
+const welcomeRoom = welcome.querySelector("#welcomeRoom")
 const nameForm = welcome.querySelector("#name");
 const roomNameForm = welcome.querySelector("#roomName");
 const room = document.getElementById("room");
 
 room.hidden = true;
-roomNameForm.hidden = true;
+welcomeRoom.hidden = true;
 
 let roomName;
 
@@ -57,7 +58,7 @@ function handleNameSubmit(e) {
     const input = nameForm.querySelector("input");
     socket.emit("nickname", input.value);
     nameForm.hidden = true;
-    roomNameForm.hidden = false;
+    welcomeRoom.hidden = false;
 }
 
 nameForm.addEventListener("submit", handleNameSubmit);
@@ -71,4 +72,20 @@ socket.on("new_message", addMessage);
 
 socket.on("bye", (left) => {
     addMessage(`${left} Left...`);
+});
+
+socket.on("room_change", (rooms) => {
+    const roomList = welcomeRoom.querySelector("ul");
+
+    roomList.innerHTML = "";
+
+    if (rooms.length === 0) {
+        return;
+    }
+
+    rooms.forEach(room => {
+        const li = document.createElement("li");
+        li.innerText = room;
+        roomList.append(li);
+    });
 });

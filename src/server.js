@@ -48,17 +48,24 @@ wsServer.on("connection", socket => {
     });
     socket.on("enter_room", (roomName, done) => {
         socket.join(roomName);
-        socket.to(roomName).emit("welcome", socket.nickname);
         done();
+        socket.to(roomName).emit("welcome", socket.nickname);
+        wsServer.sockets.emit("room_change", publicRooms());
     });
     socket.on("disconnecting", () => {
         socket.rooms.forEach(room => socket.to(room).emit("bye", socket.nickname));
+    });
+    socket.on("disconnect", () => {
+        wsServer.sockets.emit("room_change", publicRooms());
     });
     socket.on("new_message", (msg, room, done) => {
         socket.to(room).emit("new_message", `${socket.nickname} : ${msg}`);
         done();
     });
-    socket.on("nickname", nickname => socket["nickname"] = nickname)
+    socket.on("nickname", (nickname) => {
+        socket["nickname"] = nickname;
+        wsServer.sockets.emit("room_change", publicRooms());
+    });
 });
 
 //---webSocket 서버
