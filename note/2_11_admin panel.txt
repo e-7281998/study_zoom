@@ -1,0 +1,27 @@
+socketIO backend UI
+
+npm i "@socket.io/admin-ui"
+
+//server.js
+import { instrument } from "@socket.io/admin-ui";
+
+socket.io로부터 server import 해주기
+//server.js
+import {Server} from 'socket.io';
+
+const wsServer = new Server(httpServer, {
+    cors: {
+        origin: ["https://admin.socket.io"],
+        credentials: true,
+    }
+});
+instrument(wsServer, {
+    auth: false,
+});
+
+https://admin.socket.io
+접속 후 
+server URL에 서버 주소/admin
+http://localhost:3000/admin 입력 (강의)
+*http://localhost:3000 만 입력했을 때 접속 됨.
+=> server URL+Admin namespace가 http://localhost:3000/admin이 되어야 함.
