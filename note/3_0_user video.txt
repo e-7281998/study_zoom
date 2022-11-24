@@ -1,0 +1,29 @@
+//home.pug
+            video#myFace(autoplay, playsinline) 
+playsinline : 모바일 브라우저가 필요로하는 것, 비디오 화면 전체 재생 막아줌.
+
+stream : 비디오와 오디오가 결함된 것.
+
+
+//app.js
+async function getMedia() {
+    try {
+        myStream = await navigator.mediaDevices.getUserMedia(
+            {
+                audio: true,
+                vedeo: true,
+            }
+        )
+        myFace.srcObject = myStream;
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+navigator.mediaDevices.getUserMedia(constraints)
+는 유저의 유저미디어 string을 줄 것임.
+constraints는 우리가 무엇을 얻고 싶은지 보내주면 됨.
+
+.navigator 객체 : 브라우저와 관련된 정보 컨트롤
+MediaDevices : 카메라, 마이크, 공유화면 등 현재 연결된 미디어 입력 장치로의 접근 방법 제공.
+(미디어 데이터를 제공하는 모든 하드웨어로 접근할 수 있는 방법)
