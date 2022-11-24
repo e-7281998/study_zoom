@@ -1,0 +1,21 @@
+
+//app.js
+        const cameras = devices.filter(devices => devices.kind === 'videoinput');
+
+async function getCameras() {
+    try {
+        모든 장치 정보 줌 :navigator.mediaDevices.enumerateDevices()
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        연결된 카메라들만 뽑음. 콘솔에 devices찍어보면 알 수 있움.
+        const cameras = devices.filter(devices => devices.kind === 'videoinput');
+        카메라 정보를 선택할 수 있도록 값 넣어줌.
+        cameras.forEach(camera => {
+            const option = document.createElement("option");
+            option.vaue = camera.deviceId;
+            option.innerText = camera.label;
+            camerasSelect.appendChild(option);
+        });
+    } catch (e) {
+        console.log(e);
+    }
+}
