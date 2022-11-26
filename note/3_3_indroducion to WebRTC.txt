@@ -1,0 +1,17 @@
+WebRTC
+:web real time communication
+pear-to-pear임.
+내 영상과 오디오, 텍스트가 서버로 가지 않음.
+A가 hello를 보내면 서버를 거치지 않고, B에게 전송됨.
+(signaling이 끝 나면)브라우저끼리 연결됨
+real time이 빠른 이유.
+
+*Sockt.IO는 pear-to-pear이 아님
+항상 서버를 거쳐야 했음
+A가 hello를 보내면 서버로 전송되고, 서버에서 B에게 hello를 전달해줌.
+
+signaling
+서버가 필요함.
+서버가 필요한 이유는 브라우저로 하여금 서버가 상대가 어디에 있는지 알게 하는 것.
+(상대 정보를 알아야 연결하니까.)
+브라우저는 서버한테 configuration만 전달
