@@ -16,4 +16,12 @@ const httpServer = http.createServer(app);
 
 const wsServer = SocketIO(httpServer);
 
+wsServer.on("connection", socket => {
+    socket.on("join room", (roomName, done) => {
+        socket.join(roomName);
+        done();
+        socket.to(roomName).emit("welcome");
+    });
+});
+
 httpServer.listen(3000, handleListen);
