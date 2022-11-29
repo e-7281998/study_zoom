@@ -1,0 +1,55 @@
+RTCPeerConnection
+로컬 컴퓨터와 원결 피어간 WebRTC 연결을 담당.
+원격 피어에 연결하기 위한 메서드 제공,
+연결을 유지하고, 연결상태를 모니터링 하다가 더 이상 필요하디 않으면 연결 종료
+
+//app.js
+function makeConnection() {
+    peer-to-peer 연결 생성
+    myPeerConnection = new RTCPeerConnection();
+    myStream.getTracks()으로 카메라, 마이크 데이터의 스트림을 받아 넣어줌
+    myStream.getTracks().forEach(track => {
+        myPeerConnection.addTrack(track, myStream);
+    });
+}
+
+A와 B중 먼저 접속해 있는 브라우저가 offer를 만드는 행위를 시작하는 주체
+(방에 A입장 => B 입장 => A는 B가 입장했음을 알림받음 : A가 offer 만드는 주체)
+즉 기존 코드 중 다음 부분이 해당
+//app.js
+socket.on("welcome", () => {
+    console.log("someone joined");
+});
+
+다음과 같이 welcome에 offer를 만든 후 콘솔에 찍어보면
+다른 브라우저가 참가할 수 있도록 초대장을 만드는 것을 볼 수 있음
+
+socket.on("welcome", async () => {
+    const offer = await myPeerConnection.createOffer();
+    console.log(offer);
+});
+
+RTCPeerConnection.setLocalDescription() 메소드는
+연결 인터페이스와 관련이 있는 로컬 설명 (local description)을 변경함.
+A의 초대장으로 만들어야 하므로
+//app.js
+    myPeerConnection.setLocalDescription(offer);
+
+서버를 통해 전달해야 하므로.
+어떤 방이 offer 할 것인지 같이 알려주어야 하므로 roomName도 함께 보냄.
+    socket.emit("offer", offer, roomName);
+
+서버에도 알려주고, 등록해야 함. B에게 발생하도록.
+//server.js
+ socket.on("offer", (offer, roomName) => {
+        socket.to(roomName).emit("offer", offer);
+    });
+
+//app.js
+welcome과 반대로 B에서 발생함.
+서버에서 등록한 offer을 B가 실행함.
+socket.on("offer", offer => {
+    console.log(offer);
+})
+
+
