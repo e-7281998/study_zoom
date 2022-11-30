@@ -1,0 +1,48 @@
+//app.js
+socket.on("offer", offer => {
+    myPeerConnection.setRemoteDescription(offer);
+});
+자신의 것에 offer로 셋팅
+
+
+//app.js
+async function handleWelcomeSubmit(e) {
+    ..
+    socket.emit("join room", input.value, initCall);
+    위의 코드를 다음과 같이 바꿈. 위 코드처럼 하면
+    myPeerConnection.setRemoteDescription(offer); 코드 부분에서 오류 남.
+    B에 도착하기 전에 진행되기 때문에. 속도를 따라갈 수 없음.
+    await initCall();
+    socket.emit("join room", input.value);
+    ..
+}
+
+//app.js
+socket.on("offer", async (offer) => {
+    myPeerConnection.setRemoteDescription(offer);
+    const answer = await myPeerConnection.createAnswer();
+    자신의 정보(B)를 다시 A에게 주어야 함.
+    myPeerConnection.setLocalDescription(answer);
+    socket.emit("answer", answer, roomName);
+});
+
+서버에서 B의 정보를 받고, 방의 사람들에게 전달함.
+//server.js
+    socket.on("answer", (answer, roomName) => {
+        socket.to(roomName).emit("answer", answer);
+    });
+
+서버로 부터 받은 B의 정보 셋팅
+//app.js
+socket.on("answer", answer => {
+    myPeerConnection.setRemoteDescription(answer);
+});
+
+//app.js에 있는
+//Socket Code 구간은 하나의 브라우저에서 모두 실행되는 것이 아님.
+- welcome은 A에게서 실행되고
+: 자신의 정보 초대장을 만들어서 서버에 보냄,
+- offer은 B에게서 실행되고
+: 서버로부터 접속한 방의 정보 즉, A의 정보를 받고, 자신의 정보를 서버에게 답장,
+- answer은 A에게 실행됨
+: 서버로 부터 B의 정보를 받고 셋팅
