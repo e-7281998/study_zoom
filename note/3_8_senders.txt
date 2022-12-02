@@ -1,0 +1,54 @@
+카메라 바꾸면 상대에도 바뀐 카메라 전송하기
+//app.js 기존
+function makeConnection() {
+    myPeerConnection = new RTCPeerConnection();
+    myPeerConnection.addEventListener("icecandidate", handleIce);
+    myPeerConnection.addEventListener("addstream", handleAddStream);
+    myStream.getTracks().forEach(track => {
+        myPeerConnection.addTrack(track, myStream);
+    });
+}
+peer 연결 만드는 동시에 그 연결에 track을 추가 함.
+그 track을 바꿔야 함.
+카메라 바꿀 때 마다 새로운 stream을 만드는 중임.
+peer한테 stream을 업데이트 해줘야 함.
+
+//app.js
+async function handleCameraChange() {
+    await getMedia(camerasSelect.value);
+    if (myPeerConnection) {
+        카메라를 바꾸면 비디오의 sender를 알 수 있음.
+        console.log(myPeerConnection.getSenders());
+    }
+}
+
+sender
+: 우리의 peer로 보내진 medea stream track을 컨트롤 하도록 해줌.
+//app.js
+async function handleCameraChange() {
+    await getMedia(camerasSelect.value);
+    if (myPeerConnection) {
+        두개의 track이 있음.
+        하나는 나를 위한 것. myStream
+        다른 하나는 peer를 위한. 보내지는 스트림.
+        sender은 다른 브라우저로 보내진 비디오, 오디오 데이터 컨트롤 하는 방법임.
+        const videoTrack = myStream.getVideoTracks[0]; =>내 것. (바뀐 정보)
+        const videoSender = myPeerConnection.getSenders().find(sender => sender.track.kind == "video");
+        => peer를 위한 것. 보내진 내 정보.
+        videoSender.replaceTrack(videoTrack);
+        => sender로 보내진 정보 컨트롤하기. 내 것(바뀐 것)으로 재설정하기.
+        console.log(videoSender);
+    }
+}
+
+모바일 사이트에서는 볼 수 없음.
+모바일도 가능하게 하기 위해 local tunnel 설치 *글로벌로
+npm i -g localtunnel
+서버를 전세계와 공유하게 해 줌.(일시적)
+이것을 통해 서버 url 생성o
+설치 후 lt 를 통해 호출
+lt --port 3000
+url 로 접속
+
+그러나 stun service 때문에 연결 안 될 것...
+
